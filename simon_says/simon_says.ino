@@ -104,22 +104,22 @@ void loop()
       
           if (randomArray[x] == 1 && ledpin[y] == 8) 
           {  //if statements to display the stored values in the array
-            flashLED(ledpin[y], NOTE_G3);
+            flashLED(ledpin[y], NOTE_G3, 400, 100);
           }
 
           if (randomArray[x] == 2 && ledpin[y] == 9) 
           {
-            flashLED(ledpin[y], NOTE_A3);
+            flashLED(ledpin[y], NOTE_A3, 400, 100);
           }
   
           if (randomArray[x] == 3 && ledpin[y] == 10) 
           {
-            flashLED(ledpin[y], NOTE_B3);
+            flashLED(ledpin[y], NOTE_B3, 400, 100);
           }
 
           if (randomArray[x] == 4 && ledpin[y] == 11) 
           {
-            flashLED(ledpin[y], NOTE_C4);
+            flashLED(ledpin[y], NOTE_C4, 400, 100);
           }
         }
       }
@@ -128,12 +128,12 @@ void loop()
   }
 }
  
-void flashLED(int ledpin, int note) { // flashes the led and plays the required tone
+void flashLED(int ledpin, int note, int note_length, int delay_time) { // flashes the led and plays the required tone
   digitalWrite(ledpin, HIGH);
   tone(speakerpin, note, 100);
-  delay(400);
+  delay(note_length);
   digitalWrite(ledpin, LOW);
-  delay(100);
+  delay(delay_time);
 }
  
 void input() { //Function for allowing user input and checking input against the generated array
@@ -145,69 +145,52 @@ void input() { //Function for allowing user input and checking input against the
     {
       
       buttonstate = digitalRead(button[y]);
-    
-      if (buttonstate == LOW && button[y] == 2)
-      { //Checking for button push
-        digitalWrite(ledpin[0], HIGH);
-        tone(speakerpin, NOTE_G3, 100);
-        delay(200);
-        digitalWrite(ledpin[0], LOW);
-        inputArray[x] = 1;
-        delay(250);
-        Serial.print(" ");
-        Serial.print(1);
-        if (inputArray[x] != randomArray[x]) { //Checks value input by user and checks it against
-          fail();                              //the value in the same spot on the generated array
-        }                                      //The fail function is called if it does not match
-        x++;
-      }
-       if (buttonstate == LOW && button[y] == 3)
-      {
-        digitalWrite(ledpin[1], HIGH);
-        tone(speakerpin, NOTE_A3, 100);
-        delay(200);
-        digitalWrite(ledpin[1], LOW);
-        inputArray[x] = 2;
-        delay(250);
-        Serial.print(" ");
-        Serial.print(2);
-        if (inputArray[x] != randomArray[x]) {
-          fail();
-        }
-        x++;
-      }
 
-      if (buttonstate == LOW && button[y] == 4)
+      if (buttonstate == LOW)
       {
-        digitalWrite(ledpin[2], HIGH);
-        tone(speakerpin, NOTE_B3, 100);
-        delay(200);
-        digitalWrite(ledpin[2], LOW);
-        inputArray[x] = 3;
-        delay(250);
-        Serial.print(" ");
-        Serial.print(3);
-        if (inputArray[x] != randomArray[x]) {
-          fail();
+        switch (button[y]) {
+          case 2:
+            flashLED(ledpin[0], NOTE_G3, 200, 250);
+            inputArray[x] = 1;
+            Serial.print(" ");
+            Serial.print(1);
+            if (inputArray[x] != randomArray[x]) { //Checks value input by user and checks it against
+              fail();                              //the value in the same spot on the generated array
+            }                                      //The fail function is called if it does not match
+            x++;
+            break;
+          case 3:
+            flashLED(ledpin[1], NOTE_A3, 200, 250);
+            inputArray[x] = 2;
+            Serial.print(" ");
+            Serial.print(2);
+            if (inputArray[x] != randomArray[x]) {
+              fail();
+            }
+            x++;
+            break;
+          case 4:
+            flashLED(ledpin[2], NOTE_B3, 200, 250);
+            inputArray[x] = 3;
+            Serial.print(" ");
+            Serial.print(3);
+            if (inputArray[x] != randomArray[x]) {
+              fail();
+            }
+            x++;
+            break;
+          case 5:
+            flashLED(ledpin[3], NOTE_C4, 200, 250);
+            inputArray[x] = 4;
+            Serial.print(" ");
+            Serial.print(4);
+            if (inputArray[x] != randomArray[x]) 
+            {
+              fail();
+            }
+            x++;
+            break;
         }
-        x++;
-      }
-
-      if (buttonstate == LOW && button[y] == 5)
-      {
-        digitalWrite(ledpin[3], HIGH);
-        tone(speakerpin, NOTE_C4, 100);
-        delay(200);
-        digitalWrite(ledpin[3], LOW);
-        inputArray[x] = 4;
-        delay(250);
-        Serial.print(" ");
-        Serial.print(4);
-        if (inputArray[x] != randomArray[x]) 
-        {
-          fail();
-        }
-        x++;
       }
     }
   }
