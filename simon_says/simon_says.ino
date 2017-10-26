@@ -61,10 +61,7 @@ void setup()
      delay(duration2[thisNote]);
      // stop for the next note:
      noTone(speakerpin);
-     digitalWrite(ledpin[0], LOW);
-     digitalWrite(ledpin[1], LOW);
-     digitalWrite(ledpin[2], LOW);
-     digitalWrite(ledpin[3], LOW);
+     writeAllLeds(LOW);
      delay(25);
     }
   delay(1000);
@@ -75,10 +72,7 @@ void loop()
   for (int y=0; y<=99; y++)
   {
     //function for generating the array to be matched by the player
-    digitalWrite(ledpin[0], HIGH);
-    digitalWrite(ledpin[1], HIGH);
-    digitalWrite(ledpin[2], HIGH);
-    digitalWrite(ledpin[3], HIGH);
+    writeAllLeds(HIGH);  // set all LEDs to high
   
     for (int thisNote = 0; thisNote < 6; thisNote ++) {
      // play the next note:
@@ -90,10 +84,8 @@ void loop()
      delay(25);
     }
     
-    digitalWrite(ledpin[0], LOW);
-    digitalWrite(ledpin[1], LOW);
-    digitalWrite(ledpin[2], LOW);
-    digitalWrite(ledpin[3], LOW);
+    writeAllLeds(LOW); // set all LEDs to low
+    
     delay(1000);
   
     for (int y=turn; y <= turn; y++)
@@ -112,38 +104,22 @@ void loop()
       
           if (randomArray[x] == 1 && ledpin[y] == 8) 
           {  //if statements to display the stored values in the array
-            digitalWrite(ledpin[y], HIGH);
-            tone(speakerpin, NOTE_G3, 100);
-            delay(400);
-            digitalWrite(ledpin[y], LOW);
-            delay(100);
+            flashLED(ledpin[y], NOTE_G3);
           }
 
           if (randomArray[x] == 2 && ledpin[y] == 9) 
           {
-            digitalWrite(ledpin[y], HIGH);
-            tone(speakerpin, NOTE_A3, 100);
-            delay(400);
-            digitalWrite(ledpin[y], LOW);
-            delay(100);
+            flashLED(ledpin[y], NOTE_A3);
           }
   
           if (randomArray[x] == 3 && ledpin[y] == 10) 
           {
-            digitalWrite(ledpin[y], HIGH);
-            tone(speakerpin, NOTE_B3, 100);
-            delay(400);
-            digitalWrite(ledpin[y], LOW);
-            delay(100);
+            flashLED(ledpin[y], NOTE_B3);
           }
 
           if (randomArray[x] == 4 && ledpin[y] == 11) 
           {
-            digitalWrite(ledpin[y], HIGH);
-            tone(speakerpin, NOTE_C4, 100);
-            delay(400);
-            digitalWrite(ledpin[y], LOW);
-            delay(100);
+            flashLED(ledpin[y], NOTE_C4);
           }
         }
       }
@@ -152,7 +128,13 @@ void loop()
   }
 }
  
- 
+void flashLED(int ledpin, int note) { // flashes the led and plays the required tone
+  digitalWrite(ledpin, HIGH);
+  tone(speakerpin, note, 100);
+  delay(400);
+  digitalWrite(ledpin, LOW);
+  delay(100);
+}
  
 void input() { //Function for allowing user input and checking input against the generated array
 
@@ -238,21 +220,22 @@ void fail() { //Function used if the player fails to match the sequence
   for (int y=0; y<=2; y++)
   { //Flashes lights for failure
     
-    digitalWrite(ledpin[0], HIGH);
-    digitalWrite(ledpin[1], HIGH);
-    digitalWrite(ledpin[2], HIGH);
-    digitalWrite(ledpin[3], HIGH);
+    writeAllLeds(HIGH);  // set all LEDs to high
     tone(speakerpin, NOTE_G3, 300);
     delay(200);
-    digitalWrite(ledpin[0], LOW);
-    digitalWrite(ledpin[1], LOW);
-    digitalWrite(ledpin[2], LOW);
-    digitalWrite(ledpin[3], LOW);
+    writeAllLeds(LOW);  // set all LEDs to low
     tone(speakerpin, NOTE_C3, 300);
     delay(200);
   }
   delay(500);
   turn = -1; //Resets turn value so the game starts over without need for a reset button
+}
+
+void writeAllLeds(boolean state) { // sets all LEDS to high or low 
+    digitalWrite(ledpin[0], state);
+    digitalWrite(ledpin[1], state);
+    digitalWrite(ledpin[2], state);
+    digitalWrite(ledpin[3], state);
 }
 
 
